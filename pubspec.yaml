@@ -8,13 +8,28 @@ version: 1.0.0+1
 environment:
   sdk: ^3.7.2
 
+#--------[PACKAGES]------------
 dependencies:
   flutter:
     sdk: flutter
-  
-  cupertino_icons: ^1.0.8
-  flutter_admin_scaffold: ^1.4.0
 
+  # Utilities
+  flutter_admin_scaffold: ^1.4.0
+  cupertino_icons: ^1.0.8
+  image_network: ^2.6.0
+  google_fonts: ^6.2.1
+  iconsax: ^0.0.8
+
+  # Firebase
+  firebase_auth: ^5.5.3
+  firebase_core: ^3.13.0
+  google_sign_in: ^6.3.0
+  firebase_database: ^11.3.5
+
+  # State Management
+  get: ^4.7.2
+
+#--------------------------------------
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -25,6 +40,7 @@ flutter:
 
   uses-material-design: true
 
+  #--------[ASSETS]------------
   assets:
     - assets/
     - assets/images/

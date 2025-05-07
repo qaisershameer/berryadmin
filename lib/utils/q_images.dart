@@ -1,5 +1,7 @@
 class QImages{
 
+  QImages._();
+
   /// main images
   static const String dashboard = 'assets/images/dashboard.png';
 

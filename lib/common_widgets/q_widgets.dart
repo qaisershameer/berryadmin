@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 class QWidgets {
+
+  final qWidgets = QWidgets._();
+  QWidgets._();
+
   ///--- [Header Container] ---
-  Widget headerContainer({
+  static Widget headerContainer({
     required double colWidth,
     required String headerTitle,
   }) {
@@ -34,9 +38,9 @@ class QWidgets {
   }
 
   ///--- [Detail Data Container] ---
-  Widget dataContainer({
+  static Widget dataContainer({
     required double colWidth,
-    required Widget wdiget,
+    required Widget widget,
   }) {
     return Container(
       height: 70,
@@ -55,7 +59,7 @@ class QWidgets {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
 
         /// Title
-        child: wdiget
+        child: widget
 
         // Text(
         //   dataTitle,
