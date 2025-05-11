@@ -31,6 +31,12 @@ class _DriversDataState extends State<DriversData> {
             return Center(child: CircularProgressIndicator(color: QColors.primary));
           }
 
+          /// Check if data is null
+          final dataSnapshot = snapshotData.data?.snapshot;
+          if (dataSnapshot == null || dataSnapshot.value == null) {
+            return Center(child: Text('No drivers found.'));
+          }
+
           /// Extract Data from Firebase DB
           Map driverDataMap = snapshotData.data!.snapshot.value as Map;
           List driversList =[];
@@ -47,12 +53,15 @@ class _DriversDataState extends State<DriversData> {
               return Row(
                   children: [
 
+                    /// Data Detail Fields
                     QWidgets.dataContainer(colWidth: 250, widget: Text(driversList[index]['id'].toString())),
                     QWidgets.dataContainer(colWidth: 100, widget: ImageNetwork(image: driversList[index]['photo'].toString(), height: 70, width: 70)),
                     QWidgets.dataContainer(colWidth: 120, widget: Text(driversList[index]['name'].toString())),
                     QWidgets.dataContainer(colWidth: 200, widget: Text(driversList[index]['car_details']['carModel'].toString())),
                     QWidgets.dataContainer(colWidth: 120, widget: Text(driversList[index]['phone'].toString())),
-                    QWidgets.dataContainer(colWidth: 150, widget: Text(driversList[index]['earnings'].toString())),
+                    QWidgets.dataContainer(colWidth: 150, widget: driversList[index]['earnings'] != null ? Text(driversList[index]['earnings'].toString()) : Text('\$ 0')),
+
+                    /// Widget Action Buttons
                     QWidgets.dataContainer(colWidth: 300, widget:
 
                       Row(
@@ -61,9 +70,11 @@ class _DriversDataState extends State<DriversData> {
 
                               driversList[index]['blockStatus'] == 'no'
                                 ? ElevatedButton(onPressed: () async {await driversRefFromDB.child(driversList[index]['key']).update({'blockStatus': 'yes'});},
-                                  child: Text('Block',style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)))
+                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                  child: Text('Block', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)))
                                 : ElevatedButton(onPressed: () async {await driversRefFromDB.child(driversList[index]['key']).update({'blockStatus': 'no'});},
-                                  child: Text('Approve',style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)))
+                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                                  child: Text('Approve', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)))
                             ],
                       ),
                     )
@@ -75,6 +86,7 @@ class _DriversDataState extends State<DriversData> {
 
         }
     );
+
   }
 }
 

@@ -12,10 +12,10 @@ class DriversPage extends StatefulWidget {
 class _DriversPageState extends State<DriversPage> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
