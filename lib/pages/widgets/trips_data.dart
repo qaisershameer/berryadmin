@@ -1,3 +1,5 @@
+import 'package:url_launcher/url_launcher.dart';
+
 import '../../utils/q_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:berryadmin/utils/q_const.dart';
@@ -16,9 +18,13 @@ class _TripsDataState extends State<TripsData> {
 
   /// Function to load Google Map using Latitude, Longitude
   launchGoogleMap(pickUpLat, pickUpLong, dropOffLat, dropOffLong) async {
-    String directionURL = 'https://www.google.com/map/dir/?api=1&origin=$pickUpLat,$pickUpLong&destination=$dropOffLat,$dropOffLong&dir_action=navigate';
+    String directionURL = 'https://www.google.com/maps/dir/?api=1&origin=$pickUpLat,$pickUpLong&destination=$dropOffLat,$dropOffLong&dir_action=navigate';
 
-    // if(await canLaunchUrl(uri.parse(directionURL)));
+    if(await canLaunchUrl(Uri.parse(directionURL))){
+      await launchUrl(Uri.parse(directionURL));
+    } else {
+      throw 'Could not launch Google Map URL';
+    }
   }
 
   @override
@@ -77,7 +83,18 @@ class _TripsDataState extends State<TripsData> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
 
-                            ElevatedButton(onPressed: () async {},
+                            ElevatedButton(onPressed: () async {
+
+                              /// Get Values in Variables from DB
+                              String pickUpLat = '30.1014458';    // tripsList[index]['pickUpLatLng']['latitude'];
+                              String pickUpLong = '71.3634908';   // tripsList[index]['pickUpLatLng']['longitude'];
+                              String dropOffLat = '30.2114123';   // tripsList[index]['dropOffLatLng']['latitude'];
+                              String dropOffLong = '71.3950384';  //tripsList[index]['dropOffLatLng']['longitude'];
+
+                              /// Call Google Map Functions
+                              launchGoogleMap(pickUpLat, pickUpLong, dropOffLat, dropOffLong);
+
+                            },
                                 style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                                 child: Text('View Map', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
 

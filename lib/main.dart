@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Berry Admin',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
