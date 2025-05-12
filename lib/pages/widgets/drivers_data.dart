@@ -50,35 +50,58 @@ class _DriversDataState extends State<DriversData> {
             itemCount: driversList.length,
               itemBuilder: (context, index) {
 
-              return Row(
-                  children: [
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
 
-                    /// Data Detail Fields
-                    QWidgets.dataContainer(colWidth: 250, widget: Text(driversList[index]['id'].toString())),
-                    QWidgets.dataContainer(colWidth: 100, widget: ImageNetwork(image: driversList[index]['photo'].toString(), height: 70, width: 70)),
-                    QWidgets.dataContainer(colWidth: 120, widget: Text(driversList[index]['name'].toString())),
-                    QWidgets.dataContainer(colWidth: 200, widget: Text(driversList[index]['car_details']['carModel'].toString())),
-                    QWidgets.dataContainer(colWidth: 120, widget: Text(driversList[index]['phone'].toString())),
-                    QWidgets.dataContainer(colWidth: 150, widget: driversList[index]['earnings'] != null ? Text(driversList[index]['earnings'].toString()) : Text('\$ 0')),
+                child: Row(
+                    children: [
 
-                    /// Widget Action Buttons
-                    QWidgets.dataContainer(colWidth: 300, widget:
+                      /// Data Detail Fields
+                      QWidgets.dataContainer(colWidth: 250, widget: Text(driversList[index]['driverId'].toString())),
+                      QWidgets.dataContainer(colWidth: 100, widget: ImageNetwork(image: driversList[index]['photo'].toString(), height: 70, width: 70)),
+                      QWidgets.dataContainer(colWidth: 120, widget: Text(driversList[index]['name'].toString())),
+                      QWidgets.dataContainer(colWidth: 200, widget: Text(driversList[index]['car_details']['carModel'].toString())),
+                      QWidgets.dataContainer(colWidth: 120, widget: Text(driversList[index]['phone'].toString())),
+                      QWidgets.dataContainer(colWidth: 150, widget: driversList[index]['earnings'] != null ? Text(driversList[index]['earnings'].toString()) : Text('\$ 0')),
 
-                      Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                      /// Widget Action Buttons
+                      QWidgets.dataContainer(colWidth: 300, widget:
 
-                              driversList[index]['blockStatus'] == 'no'
-                                ? ElevatedButton(onPressed: () async {await driversRefFromDB.child(driversList[index]['key']).update({'blockStatus': 'yes'});},
-                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                                  child: Text('Block', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)))
-                                : ElevatedButton(onPressed: () async {await driversRefFromDB.child(driversList[index]['key']).update({'blockStatus': 'no'});},
-                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                                  child: Text('Approve', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)))
-                            ],
-                      ),
-                    )
-                  ]
+                        Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+
+                                driversList[index]['blockStatus'] == 'no'
+                                  /// Block Button
+                                  ? ElevatedButton(onPressed: () async {await driversRefFromDB.child(driversList[index]['key']).update({'blockStatus': 'yes'});},
+                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                    child: Text('Block', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)))
+
+                                  /// Approve Button
+                                  : ElevatedButton(onPressed: () async {await driversRefFromDB.child(driversList[index]['key']).update({'blockStatus': 'no'});},
+                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                                    child: Text('Approve', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+
+                                /// Buttons Gap
+                                SizedBox(width: 8.0),
+
+                                /// Delete Button
+                                ElevatedButton(onPressed: () async {
+                                  /// Delete Confirmation
+                                  bool confirmDel = await _showAlertDialog(context);
+                                    if(confirmDel){
+                                      await driversRefFromDB.child(driversList[index]['driverId']).remove();
+                                    }
+                                  },
+                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                    child: Text('Delete', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
+                                    ),
+                                ),
+                              ],
+                        ),
+                      )
+                    ]
+                ),
               );
 
             }
@@ -90,3 +113,15 @@ class _DriversDataState extends State<DriversData> {
   }
 }
 
+Future<bool> _showAlertDialog(BuildContext context) async {
+  return await showDialog(context: context, builder: (context) {
+   return AlertDialog(
+     title: const Text('Confirm Deletion!'),
+     content: const Text('Are you sure! want to delete this record???'),
+     actions: [
+       TextButton(onPressed: (){Navigator.of(context).pop(false);}, child: const Text('Cancel')),
+       TextButton(onPressed: (){Navigator.of(context).pop(true);}, child: const Text('Delete')),
+     ],
+   );
+  }) ?? false;
+}
